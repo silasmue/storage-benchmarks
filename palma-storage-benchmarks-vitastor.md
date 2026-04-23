@@ -17,18 +17,11 @@
 - **Etcd:** 3 nodes, 3 monitors (master: palma)
 - **OSDs at time of test:**
   - palma: **4 OSDs** (2× CD6-R 1.92TB, `osd_per_disk=2`), ~893 GiB each
-  - calvia: **2 OSDs** (2× CD6-R 1.92TB, `osd_per_disk=1`), ~1.7 TiB each
-  - ⚠ **Asymmetric** — see caveat below
+  - calvia: **2 OSDs** (2× CD6-R 1.92TB, `osd_per_disk=2`), ~893 TiB each
 - **Pool:** replicated, `pg_size=2`, `failure_domain=host`, `pg_count=256`
 - **Test image:** `test_bench`, 100 GiB
 - **Network:** Mellanox CX5 (palma) ↔ BlueField-2 (calvia), 100GbE RoCEv2, RDMA enabled
 - **Disk path:** native engine talks directly to OSDs; UBLK runs via `vitastor-cli map → /dev/ublkb0`
-
-### Caveat: asymmetric OSD layout
-
-Calvia was not rebuilt to `osd_per_disk=2` before the 2-OSD benchmarks. With `pg_size=2, failure_domain=host`, every write hits one OSD on palma + one on calvia. Calvia therefore acts as the slow replica and caps write throughput. A symmetric 4+4 OSD layout would likely lift parallel writes another 20–30%.
-
-The UBLK 1-OSD test was run from calvia *before* palma's rebuild, so that test was symmetric (1+1).
 
 ## Vitastor — UBLK kernel mount, 1 OSD per drive (calvia client, symmetric 1+1)
 
