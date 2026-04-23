@@ -262,3 +262,8 @@ sudo partprobe /dev/nvme0n1 /dev/nvme1n1
 sudo vitastor-disk prepare --osd_per_disk 2 /dev/nvme0n1 /dev/nvme1n1
 # wait for `vitastor-cli status` to show 0 degraded, 0 misplaced before next node
 ```
+
+## HDDs
+```
+vitastor-cli create-pool seagate_pool --ec 2+1 --pg_count 512 --failure_domain osd --ods_tags hdd --block-size 1048576
+```
